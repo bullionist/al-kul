@@ -67,16 +67,16 @@ except Exception as e:
 # Use fixed model settings without showing to user
 model = "llama3-70b-8192"  # Using the best model available
 temperature = 0.7
-max_tokens = 2000
+max_tokens = 800  # Reduced from 2000 to encourage more concise responses
 
 # App title
 st.title("Al-Kul")
-st.markdown("Ask questions about personal challenges and receive advice rooted in Islamic teachings.")
+st.markdown("Share your thoughts and challenges. I'll listen and offer Islamic wisdom with specific Quranic guidance.")
 
 # Initialize chat history in session state if it doesn't exist
 if 'messages' not in st.session_state:
     st.session_state.messages = [
-        {"role": "assistant", "content": "Assalamu alaikum! How can I assist you with Islamic guidance today?"}
+        {"role": "assistant", "content": "Salam, my friend. I'm here to listen and support you on your path. What's on your mind today?"}
     ]
 
 # Display chat messages
@@ -100,8 +100,18 @@ if user_input:
 if st.session_state.messages and st.session_state.messages[-1]["role"] == "user":
     user_input = st.session_state.messages[-1]["content"]
     
-    # Create the prompt for the API
-    system_message = "You are an Islamic guidance assistant that provides advice based on Islamic teachings, Quran, and authentic Hadith."
+    # Create the prompt for the API with instructions for a confidant-like approach
+    system_message = """You are a warm, compassionate Islamic companion who feels like a close friend. 
+    
+    Your approach should be:
+    1. First, show genuine understanding of the person's situation with empathy
+    2. Then gently offer Islamic guidance with specific references (Quran verses with Surah:Ayah or authentic Hadith)
+    3. Keep your tone conversational, personal, and caring
+    
+    Always cite at least one specific Quranic verse (with chapter:verse) or authentic Hadith relevant to their situation.
+    
+    Remain concise and direct. Speak as if you're a trusted friend who truly cares about them.
+    """
     
     # Show a spinner while waiting for the API response
     with st.spinner("Generating response..."):
@@ -131,14 +141,15 @@ if st.session_state.messages and st.session_state.messages[-1]["role"] == "user"
             print(f"Error details: {str(e)}")  # Log the error but don't show it to users
 
 # Add clear chat button at the bottom of the app instead of sidebar
-col1, col2, col3 = st.columns([1, 1, 1])
-with col2:
-    if st.button("Clear Chat"):
-        st.session_state.messages = [
-            {"role": "assistant", "content": "Assalamu alaikum! How can I assist you with Islamic guidance today?"}
-        ]
-        st.rerun()
+st.markdown('<div style="height:40px;"></div>', unsafe_allow_html=True)
+st.markdown('<div class="trash-button-container">', unsafe_allow_html=True)
+if st.button("🔄", help="Clear chat history"):
+    st.session_state.messages = [
+        {"role": "assistant", "content": "Salam, my friend. I'm here to listen and support you on your path. What's on your mind today?"}
+    ]
+    st.rerun()
+st.markdown('</div>', unsafe_allow_html=True)
 
 # Add footer
 st.markdown("---")
-st.markdown("*This application provides general guidance based on Islamic teachings. For specific legal or complex religious matters, please consult with qualified scholars.*") 
+st.markdown("*I'm here to support you with Islamic wisdom and Quranic references. For complex religious or legal matters, please also consult with qualified scholars.*") 
