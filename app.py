@@ -70,13 +70,13 @@ temperature = 0.7
 max_tokens = 800  # Reduced from 2000 to encourage more concise responses
 
 # App title
-st.title("Al-Kul")
-st.markdown("Share your thoughts and challenges. I'll listen and offer Islamic wisdom with specific Quranic guidance.")
+st.title("Al-Qul")
+st.markdown("I'm here to understand your feelings and experiences, and offer perspective with wisdom from Islamic teachings.")
 
 # Initialize chat history in session state if it doesn't exist
 if 'messages' not in st.session_state:
     st.session_state.messages = [
-        {"role": "assistant", "content": "Salam, my friend. I'm here to listen and support you on your path. What's on your mind today?"}
+        {"role": "assistant", "content": "Salam friend. I'm here to listen and understand what you're going through. How are you feeling today?"}
     ]
 
 # Display chat messages
@@ -100,21 +100,27 @@ if user_input:
 if st.session_state.messages and st.session_state.messages[-1]["role"] == "user":
     user_input = st.session_state.messages[-1]["content"]
     
-    # Create the prompt for the API with instructions for a confidant-like approach
-    system_message = """You are a warm, compassionate Islamic companion who feels like a close friend. 
+    # Create the prompt for the API with instructions for a psycho/emotional analysis approach
+    system_message = """You are a deeply empathetic friend who first focuses on understanding the person's emotions and situation before offering wisdom.
     
-    Your approach should be:
-    1. First, show genuine understanding of the person's situation with empathy
-    2. Then gently offer Islamic guidance with specific references (Quran verses with Surah:Ayah or authentic Hadith)
-    3. Keep your tone conversational, personal, and caring
+    Your conversation flow should be:
+    1. First, genuinely analyze and reflect the emotions and experiences they're going through (like a caring therapist would)
+    2. Validate their feelings and demonstrate true understanding of their unique situation
+    3. Then subtly bridge to relevant Islamic wisdom with specific references (Quran verses with Surah:Ayah or authentic Hadith)
+    4. Keep everything conversational, warm, and personal - never preachy or lecture-like
     
-    Always cite at least one specific Quranic verse (with chapter:verse) or authentic Hadith relevant to their situation.
+    Important guidelines:
+    - Prioritize emotional connection over religious instruction 
+    - Make Islamic guidance feel like natural wisdom from a caring friend, not academic teaching
+    - Weave Quranic references organically into your advice, as a friend might share a helpful quote
+    - Focus on how Islamic teachings can help with their specific emotional needs and situation
+    - Always be warm, accepting, and non-judgmental like a true friend
     
-    Remain concise and direct. Speak as if you're a trusted friend who truly cares about them.
+    Remain concise and speak naturally, as if you're a close friend having a deep, meaningful conversation over coffee.
     """
     
     # Show a spinner while waiting for the API response
-    with st.spinner("Generating response..."):
+    with st.spinner("Thinking..."):
         try:
             # Call the API without mentioning Groq
             chat_completion = client.chat.completions.create(
@@ -145,11 +151,11 @@ st.markdown('<div style="height:40px;"></div>', unsafe_allow_html=True)
 st.markdown('<div class="trash-button-container">', unsafe_allow_html=True)
 if st.button("🔄", help="Clear chat history"):
     st.session_state.messages = [
-        {"role": "assistant", "content": "Salam, my friend. I'm here to listen and support you on your path. What's on your mind today?"}
+        {"role": "assistant", "content": "Salam friend. I'm here to listen and understand what you're going through. How are you feeling today?"}
     ]
     st.rerun()
 st.markdown('</div>', unsafe_allow_html=True)
 
 # Add footer
 st.markdown("---")
-st.markdown("*I'm here to support you with Islamic wisdom and Quranic references. For complex religious or legal matters, please also consult with qualified scholars.*") 
+st.markdown("*I'm here as a friend first, offering perspective that includes Islamic wisdom. For professional counseling or specific religious rulings, please consult qualified experts.*") 
